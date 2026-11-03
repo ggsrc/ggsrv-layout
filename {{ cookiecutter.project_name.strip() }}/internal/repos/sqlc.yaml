@@ -1,0 +1,14 @@
+version: "2"
+overrides:
+  go:
+    rename:
+sql:
+  - schema:
+      - "users/schema.sql"
+    queries: "users/query.sql"
+    engine: "postgresql"
+    gen:
+      go:
+        sql_package: "wpgx"
+        package: "users"
+        out: "users"

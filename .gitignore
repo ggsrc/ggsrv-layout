@@ -1,0 +1,6 @@
+# Cache files
+.idea/
+.vscode/
+venv/
+
+.DS_Store/**

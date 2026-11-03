@@ -1,0 +1,6 @@
+go {{ cookiecutter.go_version }}
+
+use (
+    .
+	api/go
+)

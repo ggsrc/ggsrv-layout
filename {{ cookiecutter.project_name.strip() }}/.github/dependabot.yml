@@ -1,0 +1,22 @@
+version: 2
+registries:
+  github-octocat:
+    type: git
+    url: https://github.com
+    username: x-access-token
+#    password: {{ "${{ secrets.CICD_DOCKER_BUILD_PAT }}" }}
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/"
+
+    # Auto assign PRs raised to this account on Github
+    assignees:
+      - "{{ cookiecutter.go_module_path.strip('/').split('/')[1] }}"
+
+    reviewers:
+      - "{{ cookiecutter.go_module_path.strip('/').split('/')[1] }}"
+
+    # Check for updates to dependencies once a week - Saturday
+    schedule:
+      interval: "weekly"
+      day: "saturday"

@@ -1,0 +1,9 @@
+cookiecutter_inputs:
+  project_name: "{{ cookiecutter.project_name.strip() }}"
+  go_module_path: "{{ cookiecutter.go_module_path.strip('/') }}"
+  org: "{{ cookiecutter.org }}"
+  base_branch: "{{ cookiecutter.base_branch }}"
+  contact_email: "{{ cookiecutter.contact_email }}"
+  project_description: "{{ cookiecutter.project_description }}"
+  use_precommit: "{{ cookiecutter.use_precommit }}"
+  go_version: "{{ cookiecutter.go_version }}"

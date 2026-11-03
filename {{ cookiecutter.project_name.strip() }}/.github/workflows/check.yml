@@ -1,0 +1,56 @@
+{%- raw %}
+name: Go Build Test
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  GO_VERSION: "{%- endraw %}{{ cookiecutter.go_version }}{%- raw %}"
+  GOPRIVATE: ${{ vars.GOPRIVATE }}
+  GITHUB_ACCESS_TOKEN: ${{ secrets.CICD_DOCKER_BUILD_PAT2 }}
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Git for private repos
+        run: git config --global url.https://$GITHUB_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: Set up buf
+        uses: bufbuild/buf-setup-action@v1
+        with:
+          version: "1.34.0"
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Build
+        run: make build
+
+      - name: Test
+        run: make test-coverage
+
+      - name: Generate coverage report
+        run: go tool cover -html=coverage.txt -o coverage.html
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage.txt
+            coverage.html
+{%- endraw %}

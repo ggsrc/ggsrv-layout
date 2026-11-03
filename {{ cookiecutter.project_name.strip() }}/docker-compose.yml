@@ -1,0 +1,59 @@
+# Docker Compose Configuration for {{ cookiecutter.project_name.strip() }}
+#
+# This file defines all the services required for local development:
+# - PostgreSQL: Main database for application data
+# - Redis: Caching layer
+#
+# Quick Start:
+#   make docker-up      # Start all services
+#   make docker-down    # Stop all services
+#
+# PostgreSQL: localhost:5432 (user: postgres, password: my-secret, db: {{ cookiecutter.project_name.strip() }}_test_db)
+# Redis: localhost:6379
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14.5
+    container_name: {{ cookiecutter.project_name.strip() }}-postgres
+    environment:
+      POSTGRES_PASSWORD: my-secret
+      POSTGRES_DB: {{ cookiecutter.project_name.strip() }}_test_db
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - {{ cookiecutter.project_name.strip() }}-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: {{ cookiecutter.project_name.strip() }}-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - {{ cookiecutter.project_name.strip() }}-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  {{ cookiecutter.project_name.strip() }}-network:
+    driver: bridge

@@ -1,0 +1,18 @@
+{%- raw %}
+name: golang lint
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  run:
+    uses: ggsrc/public-ci/.github/workflows/golang-lint-v2.yml@main
+    with:
+      go-version: '{%- endraw %}{{ cookiecutter.go_version }}{%- raw %}'
+    secrets:
+      CICD_DOCKER_BUILD_PAT: ${{ secrets.CICD_DOCKER_BUILD_PAT }}
+{%- endraw %}

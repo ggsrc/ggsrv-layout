@@ -1,0 +1,131 @@
+name: Run Cookiecutter
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: "ggsrv-layout"
+
+      - name: Run Cookiecutter
+        uses: andrewthetechie/gha-cookiecutter@main
+        with:
+          # can be a link to a git repo or a local path
+          template: ggsrv-layout
+          cookiecutterValues: '{
+            "project_name": "ggsrv_empty",
+            "go_module_path": "github.com/ggsrc/ggsrv-empty",
+            "org": "ggsrc",
+            "base_branch": "main",
+            "contact_email": "",
+            "project_description": "GgsrvEmpty is a Go application created using https://github.com/ggsrc/ggsrv-layout",
+            "use_precommit": "y",
+            "go_version": "1.27.3"
+         }'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ggsrv_empty
+          path: ggsrv_empty
+          retention-days: 3
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: myproject_empty
+          path: myproject_empty
+          retention-days: 3
+
+
+  test1:
+    runs-on: ubuntu-latest
+    needs: [build]
+
+    env:
+      GOPRIVATE: github.com/ggsrc/*
+      GITHUB_ACCESS_TOKEN: ${{ secrets.CICD_DOCKER_BUILD_PAT }}
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ggsrv_empty
+          path: ggsrv_empty
+
+      - run: git config --global url.https://$GITHUB_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27'
+
+      - uses: bufbuild/buf-setup-action@v1
+
+      - name: install sqlc
+        run: |
+          git clone https://github.com/Stumble/sqlc.git /tmp/sqlc
+          cd /tmp/sqlc
+          go install ./cmd/sqlc
+
+      - name: install proto toolchain
+        working-directory: ggsrv_empty
+        run: |
+          bash scripts/install-buf-deps.sh
+
+      - name: build proto
+        working-directory: ggsrv_empty
+        run: |
+          make proto
+
+      - name: generate repos
+        working-directory: ggsrv_empty
+        run: |
+          make repos
+
+      - name: go build
+        working-directory: ggsrv_empty
+        run: |
+          make build
+
+      - name: go test
+        working-directory: ggsrv_empty
+        run: |
+          make test
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
+
+      - name: Build, tag, and push image to GCP Artifact Repository
+        uses: docker/build-push-action@v5
+        with:
+          # add platform will be veryslow
+          # platforms: linux/amd64
+          context: ggsrv_empty
+          file: ggsrv_empty/docker/Dockerfile
+          build-args: |
+            GITHUB_ACCESS_TOKEN=${{ secrets.CICD_DOCKER_BUILD_PAT }}
+            GIT_SHA=${{ github.sha }}
+            BUILD_TIME=${{ steps.date.outputs.date }}
+          pull: false
+          push: false
