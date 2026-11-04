@@ -6,9 +6,11 @@ sqlc without building Stumble/sqlc themselves (download, check the SHA).
 Follows `2026-11-04-toolchain-refresh.md` (its decision D3 kept PostgreSQL
 14.5, Redis 7 and mockery v2; this change replaces that decision).
 
-Depends on Stumble/wpgx v0.5.1 (`testsuite.WithPostgresImage`) and on the
-Stumble/sqlc release workflow that attaches binaries and `checksums.txt` to
-v2.4.0. Both are prepared as patches and handed over to Yumin's machine.
+Depends on Stumble/wpgx v0.5.1 (`testsuite.WithPostgresImage`, Stumble/wpgx#23)
+and on Stumble/sqlc v2.4.1, the first release with binaries and `checksums.txt`
+(Stumble/sqlc#21–#23). Both were prepared here as patches and merged and
+released from Yumin's machine; v2.4.1 also moves sqlc to Go 1.26.10 and fixes
+14 reachable vulnerabilities.
 
 ## 1. Current state
 
@@ -43,10 +45,10 @@ v2.4.0. Both are prepared as patches and handed over to Yumin's machine.
 - B4 mockery v3.9.0. `api/go/.mockery.yml` generates testify mocks of the
   service's `Client` into `api/go/client/<service>/mocks`; `make mock`
   (after `make proto`) runs it and tidies `api/go`.
-- B5 `scripts/install-sqlc.sh` installs the Stumble/sqlc v2.4.0 release
+- B5 `scripts/install-sqlc.sh` installs the Stumble/sqlc v2.4.1 release
   binary after checking the archive against SHA-256 values pinned in the
   script; `make repos` stops unless `sqlc version` is that release. The
-  committed sqlc code is what it generates (`sqlc v2.4.0-wicked-fork`).
+  committed sqlc code is what it generates (`sqlc v2.4.1-wicked-fork`).
 - B6 `make tools` installs buf/protoc/plugins, sqlc, golangci-lint, mockery
   and sql-formatter; the README quick start starts with it.
 - B7 Template CI: sqlc through `install-sqlc.sh`; `make repos` must
@@ -83,8 +85,21 @@ v2.4.0. Both are prepared as patches and handed over to Yumin's machine.
 
 ## 5. Verification
 
-Generated project, local wpgx branch (replace) and a locally built Linux
-release archive served from a fake release URL:
+Release assets: `sha256sum -c checksums.txt` OK for the five archives;
+`gh attestation verify -R Stumble/sqlc` passes for each (release workflow on
+`main`). The release run built, smoke-tested and installed on all platforms
+(run 41799904816).
+
+Generated project from this branch, wpgx v0.5.1 and sqlc v2.4.1 from GitHub:
+
+- `go mod tidy`: no change. `install-sqlc.sh` downloads, checks and installs
+  `v2.4.1-wicked-fork`. `make repos` output equals the committed code.
+- `make mock`, `go vet` on `api/go`, `make build`, golangci-lint v2.15.0
+  (`0 issues`, both modules).
+- `make test` with `GITHUB_ACTIONS=true` and no Redis service: 19 tests pass.
+
+Earlier, with the local wpgx branch and a locally built archive behind a fake
+release URL:
 
 - `make repos` without sqlc: stops with the install hint.
   `install-sqlc.sh`: installs `v2.4.0-wicked-fork`, a second run is a no-op.
@@ -107,8 +122,8 @@ release archive served from a fake release URL:
 
 ## 7. Outcome
 
-- [ ] Stumble/wpgx v0.5.1 released; `go.mod` bumped.
-- [ ] Stumble/sqlc v2.4.0 binaries released; SHA-256 values filled in
+- [x] Stumble/wpgx v0.5.1 released; `go.mod` bumped.
+- [x] Stumble/sqlc v2.4.1 released with binaries; SHA-256 values pinned in
   `install-sqlc.sh`.
 - [ ] CI green; merged.
 
