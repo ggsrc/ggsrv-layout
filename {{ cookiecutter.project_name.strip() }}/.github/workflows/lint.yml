@@ -10,9 +10,12 @@ on:
 
 jobs:
   run:
-    uses: ggsrc/public-ci/.github/workflows/golang-lint-v2.yml@main
+    uses: ggsrc/public-ci/.github/workflows/golang-lint-v2_8.yml@df144129e215005eb6acb39e37ae5c13181ec4ab # v1
     with:
       go-version: '{%- endraw %}{{ cookiecutter.go_version }}{%- raw %}'
+      # Keep in step with GOLANGCI_LINT_VERSION in scripts/install-dev-tools.sh.
+      # Its release binary must be built with a Go at least as new as go-version.
+      lint-version: v2.15.0
     secrets:
       CICD_DOCKER_BUILD_PAT: ${{ secrets.CICD_DOCKER_BUILD_PAT }}
 {%- endraw %}

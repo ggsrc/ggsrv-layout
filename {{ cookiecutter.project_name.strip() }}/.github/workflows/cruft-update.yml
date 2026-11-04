@@ -11,7 +11,7 @@ on:
 
 jobs:
   run:
-    uses: ggsrc/public-ci/.github/workflows/cruft-update.yml@main
+    uses: ggsrc/public-ci/.github/workflows/cruft-update.yml@df144129e215005eb6acb39e37ae5c13181ec4ab # v1
     secrets:
       CICD_DOCKER_BUILD_PAT: ${{ secrets.CICD_DOCKER_BUILD_PAT }}
 {%- endraw %}
