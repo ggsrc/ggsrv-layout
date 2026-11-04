@@ -12,7 +12,9 @@ ifeq ($(strip $(DOCKER)),)
 DOCKER := docker
 endif
 
-TEST_DIRS := $(shell $(GO) list ./...)
+# Evaluated only by the targets that use it: before `make proto` the API
+# packages do not exist yet and `go list` fails.
+TEST_DIRS = $(shell $(GO) list ./...)
 CGO_ENABLED=0
 GOTESTSUM_VERSION ?= v1.13.0
 

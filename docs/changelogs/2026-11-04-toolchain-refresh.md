@@ -38,6 +38,10 @@ the latest stable versions, following best practice.
 - `scripts/install-dependencies.sh` installs `github.com/stumble/v8runner`,
   which is not on the public module proxy, and nothing calls it.
 - Runtime image: `distroless/cc-debian12`.
+- Template CI noise: the Makefile ran `go list ./...` while parsing
+  (`TEST_DIRS :=`), before `make proto`, so every `make proto` printed a
+  `does not contain package` error (shown as a failure annotation); the Go
+  cache was never restored (no `go.sum` at the workspace root).
 
 ## 2. Behavior after this change
 
@@ -62,6 +66,8 @@ the latest stable versions, following best practice.
 - B7 Runtime image `distroless/cc-debian13`.
 - B8 Generated CI configures Git with the private-module token only when
   the secret is set, and has read-only `contents` permission.
+- B9 `TEST_DIRS` is evaluated only by the targets that use it; the template
+  CI restores the Go cache from the generated project's `go.sum`.
 
 ## 3. Decisions
 
@@ -84,6 +90,7 @@ the latest stable versions, following best practice.
 - `.github/dependabot.yml` (new), generated `dependabot.yml`: B2, B6.
 - `scripts/install-buf-deps.sh`, `scripts/install-dev-tools.sh`,
   `Makefile` (`GOTESTSUM_VERSION`), `api/proto/buf.gen.yaml` comments: B3.
+- `Makefile` (`TEST_DIRS =`), `black.yml` (`cache-dependency-path`): B9.
 - `go.mod`, `go.sum`, `internal/repos/users/*.go`: B3, B4.
 - `.pre-commit-config.yaml` (both), `cookiecutter.json`,
   `hooks/pre_gen_project.py` (black), whitespace / final newline / JSON
@@ -111,6 +118,8 @@ All against a project generated from this branch with the CI's answers:
 - actionlint: no findings on the template and generated workflows.
 - golangci-lint v2.5 (current) vs v2.15.0 on a Go 1.27.3 module: the first
   stops with the error in section 1, the second reports `0 issues`.
+- CI of #3 (run 41775063091): `build` and `test1` pass; the Node 20 and
+  buf token warnings of `main` are gone.
 
 ## 6. Human decisions
 
@@ -126,3 +135,7 @@ All against a project generated from this branch with the CI's answers:
 - Generated projects take this through `cruft update` after re-linking
   `.cruft.json` (`2026-11-03-public-repository.md`, section 5); the newer
   golangci-lint may report findings the old one did not.
+- The Dockerfile still takes the private-module token as a build `ARG`
+  (Docker warns `SecretsUsedInArgOrEnv`). A BuildKit secret mount is the
+  better form, but every project's image build passes `GITHUB_ACCESS_TOKEN`
+  as a build argument today, so it changes together with those pipelines.
