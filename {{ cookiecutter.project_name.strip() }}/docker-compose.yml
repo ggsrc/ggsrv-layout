@@ -11,8 +11,6 @@
 # PostgreSQL: localhost:5432 (user: postgres, password: my-secret, db: {{ cookiecutter.project_name.strip() }}_test_db)
 # Redis: localhost:6379
 
-version: '3.8'
-
 services:
   # PostgreSQL Database
   postgres:

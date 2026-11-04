@@ -20,7 +20,7 @@ require (
 	github.com/stumble/dcache v0.5.0
 	github.com/stumble/wpgx v0.5.0
 	github.com/testcontainers/testcontainers-go v0.44.0
-	github.com/testcontainers/testcontainers-go/modules/redis v0.39.0
+	github.com/testcontainers/testcontainers-go/modules/redis v0.44.0
 	google.golang.org/grpc v1.85.0
 	google.golang.org/protobuf v1.36.12
 )

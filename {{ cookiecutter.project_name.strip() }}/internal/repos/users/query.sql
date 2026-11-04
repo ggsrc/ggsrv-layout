@@ -31,4 +31,3 @@ WHERE id = @id RETURNING *;
 -- -- invalidate: [GetUserById, GetAllUsers]
 -- -- timeout: 1s
 DELETE FROM public.users WHERE id = @id RETURNING *;
-

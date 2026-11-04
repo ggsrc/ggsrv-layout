@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GOLANGCI_LINT_VERSION="${GOLANGCI_LINT_VERSION:-v2.5}"
-MOCKERY_VERSION="${MOCKERY_VERSION:-latest}"
-SQL_FORMATTER_VERSION="${SQL_FORMATTER_VERSION:-latest}"
+# GOLANGCI_LINT_VERSION matches lint-version in .github/workflows/lint.yml.
+GOLANGCI_LINT_VERSION="${GOLANGCI_LINT_VERSION:-v2.15.0}"
+MOCKERY_VERSION="${MOCKERY_VERSION:-v2.53.8}"
+SQL_FORMATTER_VERSION="${SQL_FORMATTER_VERSION:-15.9.0}"
 
 echo "Installing golangci-lint ${GOLANGCI_LINT_VERSION}..."
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@"${GOLANGCI_LINT_VERSION}"

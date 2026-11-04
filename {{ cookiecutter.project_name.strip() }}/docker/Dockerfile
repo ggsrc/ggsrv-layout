@@ -36,7 +36,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 
 # https://github.com/GoogleContainerTools/distroless/blob/master/examples/go/Dockerfile
 # Use distroless would loss us the ability to k exec into the pod
-FROM gcr.io/distroless/cc-debian12
+FROM gcr.io/distroless/cc-debian13
 COPY --from=build /app/bin/* /
 
 ARG GIT_SHA=unknown

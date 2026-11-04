@@ -14,6 +14,7 @@ endif
 
 TEST_DIRS := $(shell $(GO) list ./...)
 CGO_ENABLED=0
+GOTESTSUM_VERSION ?= v1.13.0
 
 # Determine OS and go build args
 UNAME := $(shell uname -m)
@@ -161,13 +162,13 @@ test:
 	@echo "--> Running tests (Test-Container mode)"
 	export ENV=test && \
 	export TZ=UTC && \
-	CGO_ENABLED=${CGO_ENABLED} GOOS=$(GOOS) $(GO) run gotest.tools/gotestsum@latest --format github-actions -- -tags=integration ./...
+	CGO_ENABLED=${CGO_ENABLED} GOOS=$(GOOS) $(GO) run gotest.tools/gotestsum@$(GOTESTSUM_VERSION) --format github-actions -- -tags=integration ./...
 
 test-coverage:
 	@echo "--> Running tests with coverage (Test-Container mode)"
 	export ENV=test && \
 	export TZ=UTC && \
-	CGO_ENABLED=${CGO_ENABLED} GOOS=$(GOOS) $(GO) run gotest.tools/gotestsum@latest --format github-actions -- -tags=integration ./... -coverprofile=coverage.txt -covermode=atomic
+	CGO_ENABLED=${CGO_ENABLED} GOOS=$(GOOS) $(GO) run gotest.tools/gotestsum@$(GOTESTSUM_VERSION) --format github-actions -- -tags=integration ./... -coverprofile=coverage.txt -covermode=atomic
 	@echo "--> Generating HTML coverage report"
 	$(GO) tool cover -html=coverage.txt -o coverage.html
 	@echo "--> Coverage report: coverage.html"
