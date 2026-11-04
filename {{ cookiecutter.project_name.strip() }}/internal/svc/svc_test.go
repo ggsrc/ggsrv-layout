@@ -18,11 +18,20 @@ import (
 )
 
 // Test container images. Keep them in step with docker-compose.yml and with
-// the versions the production database and Redis run.
+// the versions the production database and Redis run. The PostgreSQL image is
+// the postgres_version chosen when the project was generated;
+// POSTGRES_TEST_IMAGE overrides it for one run (e.g. to try a newer major).
 const (
-	postgresImage = "postgres:18.6"
-	redisImage    = "redis:8.10.3-alpine"
+	defaultPostgresImage = "postgres:{{ cookiecutter.postgres_version }}"
+	redisImage           = "redis:8.10.3-alpine"
 )
+
+func postgresImage() string {
+	if image := os.Getenv("POSTGRES_TEST_IMAGE"); image != "" {
+		return image
+	}
+	return defaultPostgresImage
+}
 
 func init() {
 	if env.IsUnitTest() {
@@ -53,7 +62,7 @@ func newSvcTestSuite() *SvcTestSuite {
 			[]string{
 				users.Schema, // wpgx will auto-apply schema
 			},
-			testsuite.WithPostgresImage(postgresImage),
+			testsuite.WithPostgresImage(postgresImage()),
 		),
 	}
 }

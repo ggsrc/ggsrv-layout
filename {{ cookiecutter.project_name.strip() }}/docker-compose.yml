@@ -14,8 +14,9 @@
 services:
   # PostgreSQL Database
   postgres:
-    # Keep in step with internal/svc/svc_test.go and the production database.
-    image: postgres:18.6
+    # The major version the production database runs (postgres_version when the
+    # project was generated); internal/svc/svc_test.go uses the same image.
+    image: postgres:{{ cookiecutter.postgres_version }}
     container_name: {{ cookiecutter.project_name.strip() }}-postgres
     environment:
       POSTGRES_PASSWORD: my-secret
@@ -24,10 +25,17 @@ services:
     ports:
       - "5432:5432"
     volumes:
+{%- if cookiecutter.postgres_version.split('.')[0] | int >= 18 %}
       # PostgreSQL 18+ images keep data under /var/lib/postgresql/<major>/.
       # A volume created by an older major cannot be opened: recreate it with
       # `docker compose down -v` (local data is lost) or dump and restore.
       - postgres_data:/var/lib/postgresql
+{%- else %}
+      # Images before PostgreSQL 18 keep data in /var/lib/postgresql/data.
+      # After changing the major version, recreate the volume with
+      # `docker compose down -v` (local data is lost) or dump and restore.
+      - postgres_data:/var/lib/postgresql/data
+{%- endif %}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s

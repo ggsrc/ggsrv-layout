@@ -7,3 +7,4 @@ cookiecutter_inputs:
   project_description: "{{ cookiecutter.project_description }}"
   use_precommit: "{{ cookiecutter.use_precommit }}"
   go_version: "{{ cookiecutter.go_version }}"
+  postgres_version: "{{ cookiecutter.postgres_version }}"

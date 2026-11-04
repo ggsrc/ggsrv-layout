@@ -595,9 +595,11 @@ make docker-down
 make docker-up
 ```
 
-If PostgreSQL exits with "in 18+, these Docker images are configured to store
-database data in a format ..." the local volume was created by an older major
-version. Recreate it (local data is lost) or dump and restore it first:
+If PostgreSQL does not start after its major version changed (for example
+"in 18+, these Docker images are configured to store database data in a
+format ..." or "database files are incompatible with server"), the local
+volume was created by another major version. Recreate it (local data is lost)
+or dump and restore it first:
 ```bash
 docker compose down -v
 make docker-up
