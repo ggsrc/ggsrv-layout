@@ -595,6 +595,19 @@ make docker-down
 make docker-up
 ```
 
+If PostgreSQL exits with "in 18+, these Docker images are configured to store
+database data in a format ..." the local volume was created by an older major
+version. Recreate it (local data is lost) or dump and restore it first:
+```bash
+docker compose down -v
+make docker-up
+```
+
+### `make repos` asks for another sqlc
+```bash
+scripts/install-sqlc.sh   # the version pinned for this project
+```
+
 ## 📖 Related Guides
 
 - [DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md) - Overall development workflow

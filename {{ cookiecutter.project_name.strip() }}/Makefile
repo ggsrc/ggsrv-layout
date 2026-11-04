@@ -17,6 +17,8 @@ endif
 TEST_DIRS = $(shell $(GO) list ./...)
 CGO_ENABLED=0
 GOTESTSUM_VERSION ?= v1.13.0
+# The sqlc release scripts/install-sqlc.sh installs; `make repos` requires it.
+SQLC_VERSION := $(shell sed -n 's/^SQLC_VERSION="\(.*\)"$$/\1/p' scripts/install-sqlc.sh)
 
 # Determine OS and go build args
 UNAME := $(shell uname -m)
@@ -82,7 +84,27 @@ proto-update:
 .PHONY: repos convert
 
 repos:
+	@v="$$(sqlc version 2>/dev/null)"; if [ "$$v" != "$(SQLC_VERSION)-wicked-fork" ]; then \
+		echo "sqlc $(SQLC_VERSION)-wicked-fork is required (found: $${v:-none}). Run scripts/install-sqlc.sh."; \
+		exit 1; \
+	fi
 	cd internal/repos && sqlc generate
+
+# Testify mocks of the client interfaces listed in api/go/.mockery.yml (mockery v3).
+.PHONY: mock
+mock: proto
+	cd api/go && mockery && $(GO) mod tidy
+
+# =============================================================================
+# Tools
+# =============================================================================
+
+# buf, protoc and plugins; sqlc; golangci-lint, mockery, sql-formatter.
+.PHONY: tools
+tools:
+	bash scripts/install-buf-deps.sh
+	bash scripts/install-sqlc.sh
+	bash scripts/install-dev-tools.sh
 
 convert:
 	goverter gen ./internal/convert/...
@@ -220,6 +242,9 @@ submodule:
 help:
 	@echo "Usage: make [target]"
 	@echo ""
+	@echo "Setup:"
+	@echo "  tools              Install buf, protoc, sqlc, golangci-lint, mockery, sql-formatter"
+	@echo ""
 	@echo "Build:"
 	@echo "  build              Build all binaries"
 	@echo "  local-run          Run the server locally"
@@ -237,6 +262,7 @@ help:
 	@echo ""
 	@echo "Code Generation:"
 	@echo "  repos              Generate sqlc code"
+	@echo "  mock               Generate client mocks (mockery)"
 	@echo "  convert            Generate goverter converters"
 	@echo ""
 	@echo "Formatting:"

@@ -1,0 +1,12 @@
+# mockery v3 (scripts/install-dev-tools.sh). `make mock` writes testify mocks of
+# the interfaces below; services that call this one use them in their tests.
+# Docs: https://vektra.github.io/mockery/latest/
+template: testify
+structname: "Mock{% raw %}{{.InterfaceName}}{% endraw %}"
+dir: "{% raw %}{{.InterfaceDir}}{% endraw %}/mocks"
+filename: mocks.go
+pkgname: mocks
+packages:
+  {{ cookiecutter.go_module_path.strip('/') }}/api/go/client/{{ cookiecutter.project_name.strip() }}:
+    interfaces:
+      Client:
