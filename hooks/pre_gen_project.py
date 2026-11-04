@@ -36,11 +36,9 @@ for validator in validators:
     except Exception as e:
         print(f"\n\nRan into exception while running validator: `{validator.__name__}`")
         print(f"Stacktrace: `{type(e).__name__}: {e}`")
-        print(
-            f"""  \
+        print(f"""  \
 \n\nggsrv-layout is still under development, if you feel that the error is incorrect, \
 you are encouraged to raise an issue at your template repository.
-"""
-        )
+""")
 
         exit(-10)

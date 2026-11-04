@@ -1,15 +1,15 @@
 {
-	"language": "postgresql",
-	"indent": "  ",
-	"uppercase": true,
-	"linesBetweenQueries": 2,
-	"keywordCase": "upper",
-	"dataTypeCase": "upper",
-	"functionCase": "upper",
-	"useTabs": false,
-	"tabWidth": 2,
-	"expressionWidth": 80,
-	"denseOperators": false,
-	"newlineBeforeSemicolon": false,
-	"semicolonNewline": false
+  "dataTypeCase": "upper",
+  "denseOperators": false,
+  "expressionWidth": 80,
+  "functionCase": "upper",
+  "indent": "  ",
+  "keywordCase": "upper",
+  "language": "postgresql",
+  "linesBetweenQueries": 2,
+  "newlineBeforeSemicolon": false,
+  "semicolonNewline": false,
+  "tabWidth": 2,
+  "uppercase": true,
+  "useTabs": false
 }
