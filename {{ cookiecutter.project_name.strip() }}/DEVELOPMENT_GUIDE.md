@@ -11,7 +11,7 @@ This step-by-step guide will help you (or an AI assistant) initialize a fully fu
 ## 📚 Available Guidelines
 
 ### 0. Project Setup Guide (START HERE!)
-**File**: `PROJECT_SETUP_GUIDE.md`  
+**File**: `PROJECT_SETUP_GUIDE.md`\
 **Purpose**: Step-by-step initialization guide for new projects
 
 **Key Topics**:
@@ -36,7 +36,7 @@ cat PROJECT_SETUP_GUIDE.md
 ```
 
 ### 1. Service Testing Guide
-**File**: `SERVICE_TEST_GUIDE.md`  
+**File**: `SERVICE_TEST_GUIDE.md`\
 **Purpose**: Complete guide for writing service tests using wpgx test suite
 
 **Key Topics**:
@@ -59,7 +59,7 @@ make test
 ```
 
 ### 2. Repository Layer Guide
-**Files**: 
+**Files**:
 - `internal/repos/REPOSITORY_GUIDE.md` - Detailed guidelines
 - `internal/repos/README.md` - Quick reference
 
@@ -151,7 +151,7 @@ make docker-down    # Stop all services
 2. **Initialize Project**: `PROJECT_SETUP_GUIDE.md` (step-by-step setup)
 3. **Database Work**: `internal/repos/README.md` (quick start)
 4. **Service Layer**: `SERVICE_TEST_GUIDE.md` (testing patterns)
-5. **Advanced Topics**: 
+5. **Advanced Topics**:
    - `internal/repos/REPOSITORY_GUIDE.md` (detailed DB patterns)
 
 ## 🔍 Finding Information

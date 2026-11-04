@@ -250,7 +250,7 @@ This project includes pre-configured GitHub Actions workflows:
 
 Automatic dependency updates are enabled:
 - Weekly Go module updates
-- GitHub Actions updates  
+- GitHub Actions updates
 - Docker base image updates
 
 To disable: Remove `.github/dependabot.yml`

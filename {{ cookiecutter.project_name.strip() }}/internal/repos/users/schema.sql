@@ -8,4 +8,3 @@ CREATE TABLE IF NOT EXISTS public.users (
 
 CREATE INDEX IF NOT EXISTS users_name_idx
     ON users (name);
-

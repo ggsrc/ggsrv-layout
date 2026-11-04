@@ -1,0 +1,15 @@
+version: 2
+updates:
+  # The template's own CI (.github/workflows). Generated projects get their own
+  # dependabot.yml from the template directory.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "chore(ci)"

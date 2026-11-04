@@ -1,10 +1,9 @@
 [
   {
-    "id": 10,
-    "name": "Alice",
     "age": 25,
     "created_at": "1970-01-01T00:00:00Z",
+    "id": 10,
+    "name": "Alice",
     "updated_at": "1970-01-01T00:00:00Z"
   }
 ]
-

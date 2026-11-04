@@ -81,7 +81,7 @@ my-service/
   - DEVELOPMENT_GUIDE.md - Central hub linking all documentation
   - SERVICE_TEST_GUIDE.md - Testing patterns and best practices
   - REPOSITORY_GUIDE.md - Database patterns with sqlc
-  
+
 - **⚡ Instant Productivity** - Everything pre-configured and working out of the box
   - Proto generation with `buf`
   - SQL-to-Go code generation with `sqlc`
@@ -316,18 +316,18 @@ make clean          # Remove generated files
 The template enforces industry best practices:
 
 ### Database Layer
-✅ Use sqlc for type-safe SQL  
-✅ Add cache annotations to queries  
-✅ Add timeout annotations  
-✅ Use transactions for multi-table operations  
-❌ Never use string concatenation in SQL  
+- ✅ Use sqlc for type-safe SQL
+- ✅ Add cache annotations to queries
+- ✅ Add timeout annotations
+- ✅ Use transactions for multi-table operations
+- ❌ Never use string concatenation in SQL
 
 ### Service Layer
-✅ Write tests with golden files  
-✅ Use table-driven tests  
-✅ Mock external dependencies  
-✅ Test error cases  
-❌ Don't test external services directly  
+- ✅ Write tests with golden files
+- ✅ Use table-driven tests
+- ✅ Mock external dependencies
+- ✅ Test error cases
+- ❌ Don't test external services directly
 
 ## 🚀 CI/CD & GitHub Actions
 

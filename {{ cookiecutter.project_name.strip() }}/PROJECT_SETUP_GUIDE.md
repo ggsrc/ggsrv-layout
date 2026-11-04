@@ -316,7 +316,7 @@ import (
 
 func (s *Service) AddProject(ctx context.Context, req *pb.AddProjectRequest) (*pb.AddProjectResponse, error) {
     now := time.Now()
-    
+
     project, err := s.projectsRepo.AddProject(ctx, projects.AddProjectParams{
         Name:        req.Name,
         Description: req.Description,
@@ -413,7 +413,7 @@ func (suite *SvcTestSuite) TestAddProject() {
     }
 
     resp, err := suite.svc.AddProject(ctx, req)
-    
+
     assert.NoError(suite.T(), err)
     assert.NotNil(suite.T(), resp)
     assert.NotNil(suite.T(), resp.Project)
@@ -439,7 +439,7 @@ func (suite *SvcTestSuite) TestListProjects() {
 
     // List projects
     resp, err := suite.svc.ListProjects(ctx, &pb.ListProjectsRequest{})
-    
+
     assert.NoError(suite.T(), err)
     assert.NotNil(suite.T(), resp)
     assert.GreaterOrEqual(suite.T(), len(resp.Projects), 2)

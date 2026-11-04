@@ -2,7 +2,7 @@
     "project_name": "my-service",
     "project_description": "{{ ''.join(cookiecutter.project_name.strip().replace('-', ' ').replace('_', ' ').title().split()) }} is a Go gRPC service",
     "org": "ggsrc",
-  	"go_module_path": "github.com/{{ cookiecutter.org }}/{{ cookiecutter.project_name.replace(' ', '-') }}",
+    "go_module_path": "github.com/{{ cookiecutter.org }}/{{ cookiecutter.project_name.replace(' ', '-') }}",
     "base_branch": "main",
     "contact_email": "",
     "use_precommit": "y",

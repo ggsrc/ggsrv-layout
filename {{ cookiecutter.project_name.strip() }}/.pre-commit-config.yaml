@@ -1,10 +1,10 @@
-default_stages: [ commit, push ]
+default_stages: [ pre-commit, pre-push ]
 fail_fast: true   # stop running hooks at the first failure
-minimum_pre_commit_version: 2.15.0
+minimum_pre_commit_version: 3.2.0
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v6.0.0
     hooks:
 
       # Verify syntax
@@ -34,6 +34,6 @@ repos:
         args: ['--maxkb=10240', '--enforce-all']
 
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: 2.1.5
+    rev: 3.0.0
     hooks:
       - id: git-check     # check for git conflict markers and whitespace errors - uses git internally
