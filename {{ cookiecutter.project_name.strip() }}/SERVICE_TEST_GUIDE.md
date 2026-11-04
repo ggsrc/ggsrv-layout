@@ -27,6 +27,16 @@ suite.dbClient = repos.NewClient(suite.Pool.WConn(), cache, redis, logger)
 ```{% endraw %}
 
 ### 2. gRPC Mock Pattern
+
+Services generated from this template publish testify mocks of their client:
+`make mock` (mockery v3, `api/go/.mockery.yml`) writes
+`api/go/client/<service>/mocks`. Use those for another service's client:
+{% raw %}```go
+m := mocks.NewMockClient(t)
+m.EXPECT().Get{RESOURCE}(mock.Anything, mock.Anything).Return(&pb.Get{RESOURCE}Response{}, nil)
+```{% endraw %}
+
+A hand-written mock works the same way when no generated one exists:
 {% raw %}```go
 type Mock{SERVICE}Client struct {
     mock.Mock

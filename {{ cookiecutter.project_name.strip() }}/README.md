@@ -15,17 +15,20 @@
 git clone https://{{ cookiecutter.go_module_path.strip('/') }}
 cd {{ cookiecutter.project_name.strip() }}
 
-# 2. Start dependencies (PostgreSQL + Redis)
+# 2. Install the pinned tools (buf, protoc, sqlc, golangci-lint, mockery)
+make tools
+
+# 3. Start dependencies (PostgreSQL + Redis)
 make docker-up
 
-# 3. Generate code
+# 4. Generate code
 make proto     # Generate protobuf code
 make repos     # Generate database code from SQL
 
-# 4. Run the service
+# 5. Run the service
 make local-run
 
-# 5. Test it works
+# 6. Test it works
 grpcurl -plaintext localhost:9090 {{ cookiecutter.project_name.strip().replace('-', '_') }}.v1.GService/Ping
 ```
 

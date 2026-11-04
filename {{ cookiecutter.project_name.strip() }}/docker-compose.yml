@@ -14,7 +14,8 @@
 services:
   # PostgreSQL Database
   postgres:
-    image: postgres:14.5
+    # Keep in step with internal/svc/svc_test.go and the production database.
+    image: postgres:18.6
     container_name: {{ cookiecutter.project_name.strip() }}-postgres
     environment:
       POSTGRES_PASSWORD: my-secret
@@ -23,7 +24,10 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      # PostgreSQL 18+ images keep data under /var/lib/postgresql/<major>/.
+      # A volume created by an older major cannot be opened: recreate it with
+      # `docker compose down -v` (local data is lost) or dump and restore.
+      - postgres_data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -34,7 +38,7 @@ services:
 
   # Redis Cache
   redis:
-    image: redis:7-alpine
+    image: redis:8.10.3-alpine
     container_name: {{ cookiecutter.project_name.strip() }}-redis
     ports:
       - "6379:6379"

@@ -17,6 +17,13 @@ import (
 	"{{ cookiecutter.go_module_path.strip('/') }}/internal/repos/users"
 )
 
+// Test container images. Keep them in step with docker-compose.yml and with
+// the versions the production database and Redis run.
+const (
+	postgresImage = "postgres:18.6"
+	redisImage    = "redis:8.10.3-alpine"
+)
+
 func init() {
 	if env.IsUnitTest() {
 		// Set environment variables for service configuration
@@ -46,6 +53,7 @@ func newSvcTestSuite() *SvcTestSuite {
 			[]string{
 				users.Schema, // wpgx will auto-apply schema
 			},
+			testsuite.WithPostgresImage(postgresImage),
 		),
 	}
 }
@@ -65,17 +73,15 @@ func newCache() *ggcache.Cache {
 }
 
 func (suite *SvcTestSuite) setupRedisContainer() error {
-	// Check if we're in GitHub Actions with services (fallback mode)
-	if os.Getenv("GITHUB_ACTIONS") == "true" && os.Getenv("REDIS_HOST") == "" {
-		// In GitHub Actions with services, Redis should be available at localhost:6379
-		_ = os.Setenv("REDIS_HOST", "127.0.0.1")
-		_ = os.Setenv("REDIS_PORT", "6379")
+	// A Redis started outside the tests (REDIS_HOST / REDIS_PORT) is used as is.
+	if os.Getenv("REDIS_HOST") != "" {
 		return nil
 	}
 
-	// Use testcontainers mode for Redis (wpgx doesn't manage Redis)
+	// Otherwise start one with testcontainers (wpgx doesn't manage Redis), in
+	// CI as on a laptop.
 	ctx := context.Background()
-	redisContainer, err := redis.Run(ctx, "redis:7-alpine")
+	redisContainer, err := redis.Run(ctx, redisImage)
 	if err != nil {
 		return err
 	}

@@ -32,3 +32,11 @@ updates:
       day: "saturday"
     cooldown:
       default-days: 7
+
+  - package-ecosystem: "docker-compose"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+    cooldown:
+      default-days: 7

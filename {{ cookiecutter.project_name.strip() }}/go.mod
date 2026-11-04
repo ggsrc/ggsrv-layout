@@ -18,7 +18,7 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/stretchr/testify v1.12.1
 	github.com/stumble/dcache v0.5.0
-	github.com/stumble/wpgx v0.5.0
+	github.com/stumble/wpgx v0.5.1
 	github.com/testcontainers/testcontainers-go v0.44.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.44.0
 	google.golang.org/grpc v1.85.0
