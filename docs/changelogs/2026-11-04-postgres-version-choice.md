@@ -60,7 +60,8 @@ Follows `2026-11-04-pg18-redis8-tools.md`, which fixed new projects on 18.6.
 
 ## 7. Outcome
 
-- [ ] CI green (all four checks); merged.
+- [x] CI green (run 41908907180: `build`, `test1`, `build (postgres 18.6)`,
+  `test1 (postgres 18.6)`); squash-merged (#5).
 
 ## 8. Remaining work
 
