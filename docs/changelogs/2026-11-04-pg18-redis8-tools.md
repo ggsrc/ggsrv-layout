@@ -125,7 +125,9 @@ release URL:
 - [x] Stumble/wpgx v0.5.1 released; `go.mod` bumped.
 - [x] Stumble/sqlc v2.4.1 released with binaries; SHA-256 values pinned in
   `install-sqlc.sh`.
-- [ ] CI green; merged.
+- [x] CI green (run 41802663044: sqlc installed from the release, `make repos`
+  equals the committed code, mocks generated, 19 tests pass); squash-merged
+  (#4).
 
 ## 8. Remaining work
 
