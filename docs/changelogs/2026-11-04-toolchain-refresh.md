@@ -127,8 +127,9 @@ All against a project generated from this branch with the CI's answers:
 
 ## 7. Outcome
 
-- [ ] CI green.
-- [ ] Merged.
+- [x] CI green (run 41775698725); remaining annotations: the Docker `ARG`
+  warning (section 8) and GitHub's runner-image notice.
+- [x] Squash-merged (#3).
 
 ## 8. Remaining work
 
