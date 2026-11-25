@@ -68,7 +68,7 @@ jobs:
           name: ggsrv_empty-${{ matrix.postgres }}
           path: ggsrv_empty
 
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
         with:
           go-version: '1.27'
           cache-dependency-path: ggsrv_empty/go.sum
